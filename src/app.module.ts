@@ -1,10 +1,15 @@
-import { Module } from '@nestjs/common';
+import * as Joi from 'joi';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { typeORMConfig } from './config/typeorm.config';
-import * as Joi from 'joi';
+import { GraphQLModule } from '@nestjs/graphql';
+import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeORMConfig } from '@config/typeorm.config';
+import { graphqlConfig } from '@config/graphql.config';
+import { AuthModule } from '@auth/auth.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -25,6 +30,14 @@ import * as Joi from 'joi';
       useFactory: (configService: ConfigService) =>
         typeORMConfig(configService),
     }),
+    GraphQLModule.forRootAsync<ApolloDriverConfig>({
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        graphqlConfig(configService),
+      driver: ApolloDriver,
+    }),
+    AuthModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
