@@ -10,6 +10,7 @@ import { typeORMConfig } from '@config/typeorm.config';
 import { graphqlConfig } from '@config/graphql.config';
 import { AuthModule } from '@auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { DataSource } from 'typeorm';
 
 @Module({
   imports: [
@@ -29,6 +30,9 @@ import { UsersModule } from './users/users.module';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) =>
         typeORMConfig(configService),
+      dataSourceFactory: async (options) => {
+        return await new DataSource(options).initialize();
+      },
     }),
     GraphQLModule.forRootAsync<ApolloDriverConfig>({
       inject: [ConfigService],
