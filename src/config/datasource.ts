@@ -17,7 +17,7 @@ export function config(): DataSourceOptions {
     password: configService.get<string>('DB_PASSWORD'),
     entities: [User],
     migrations: ['./src/database/migrations/**/*{.ts,.js}'],
-    migrationsTableName: 'migration',
+    migrationsTableName: 'migration_typeorm',
     logging: true,
     extra: {
       max: 100,
