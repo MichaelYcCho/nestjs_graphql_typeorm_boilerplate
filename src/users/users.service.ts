@@ -1,38 +1,32 @@
-import { HttpException, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserRepository } from '@users/repository/user.repository';
-import { createUserInput, createUserOutput } from '@users/dtos/create-user.dto';
-import { GraphQLError } from 'graphql';
+import { Injectable } from '@nestjs/common'
+import { InjectRepository } from '@nestjs/typeorm'
+import { UserRepository } from '@users/repository/user.repository'
+import { createUserInput, createUserOutput } from '@users/dtos/create-user.dto'
+import { ExceptionHandler } from '@common/errors/error.handler'
+import { USERS_ERRORS } from '@common/errors/error.list'
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(UserRepository)
-    private userRepository: UserRepository,
-  ) {}
+    constructor(
+        @InjectRepository(UserRepository)
+        private userRepository: UserRepository,
+    ) {}
 
-  async createUser({
-    email,
-    password,
-    //profileName,
-  }: createUserInput): Promise<createUserOutput> {
-    try {
-      const existUser = await this.userRepository.findUserByEmail(email);
+    async createUser({ email, password, profileName }: createUserInput): Promise<createUserOutput> {
+        try {
+            const existUser = await this.userRepository.findUserByEmail(email)
 
-      if (existUser) {
-        throw new GraphQLError('이미 존재하는 이메일입니다.');
-      }
-      const user = await this.userRepository.save({
-        email,
-        password,
-        //  profileName,
-      });
-
-      throw new GraphQLError('ㅋㅋㅋ 존재하는 이메일입니다.');
-    } catch (e) {
-      console.log('흠?');
-      throw new GraphQLError('ㅊㅊ 존재하는 이메일입니다.');
-      //      return { ok: false, error: "Couldn't create account" };
+            if (existUser) {
+                throw new ExceptionHandler(USERS_ERRORS.USER_NAME_ALREADY_EXIST)
+            }
+            await this.userRepository.save({
+                email,
+                password,
+                profileName,
+            })
+            return { isSuccess: true, error: null }
+        } catch (e) {
+            throw new ExceptionHandler(USERS_ERRORS.FAILED_CREATE_USER)
+        }
     }
-  }
 }
