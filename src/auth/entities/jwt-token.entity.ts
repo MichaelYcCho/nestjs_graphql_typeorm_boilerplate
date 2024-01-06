@@ -1,5 +1,5 @@
-import { TimeStamp } from '@common/entities/time-stamp.entity'
-import { JWT_PREFIX } from '@common/utils/constant'
+import { TimeStamp } from '@core/entities/time-stamp.entity'
+import { JWT_PREFIX } from '@core/utils/constant'
 import { User } from '@users/entities/user.entity'
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm'
 

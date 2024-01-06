@@ -14,6 +14,6 @@ export function typeORMConfig(configService: ConfigService): TypeOrmModuleOption
         entities: [User, JwtToken],
         logging: true,
         autoLoadEntities: true,
-        synchronize: true,
+        synchronize: false,
     }
 }

@@ -1,9 +1,10 @@
-import { DB_SCHEMA, USER_PREFIX } from '@common/utils/constant'
 import { IsBoolean, IsEmail, IsNumber, IsString } from 'class-validator'
-import { TimeStamp } from '@common/entities/time-stamp.entity'
+
 import { Field, InputType, ObjectType } from '@nestjs/graphql'
 import { Column, Entity, Index, OneToOne, PrimaryGeneratedColumn, Relation } from 'typeorm'
 import { JwtToken } from '@auth/entities/jwt-token.entity'
+import { DB_SCHEMA, USER_PREFIX } from '@core/utils/constant'
+import { TimeStamp } from '@core/entities/time-stamp.entity'
 
 @InputType('UserInputType', { isAbstract: true })
 @Index('email', ['email'], { unique: true })
