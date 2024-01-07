@@ -3,10 +3,11 @@ import { ExceptionHandler } from '@core/errors/error.handler'
 import { AUTH_ERRORS } from '@core/errors/error.list'
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common'
 import { ConfigService } from '@nestjs/config'
+import { GqlExecutionContext } from '@nestjs/graphql'
 import { JwtService } from '@nestjs/jwt'
 
 @Injectable()
-export class JwtAccessAuthGuard implements CanActivate {
+export class JwtAuthGuard implements CanActivate {
     constructor(
         private jwtService: JwtService,
         private authService: AuthService,
@@ -14,7 +15,8 @@ export class JwtAccessAuthGuard implements CanActivate {
     ) {}
     async canActivate(context: ExecutionContext): Promise<any> {
         try {
-            const request = context.switchToHttp().getRequest()
+            const gqlContext = GqlExecutionContext.create(context).getContext()
+            const request = gqlContext['req']
             const authHeader = request.headers['authorization']
             if (!authHeader) {
                 return false
@@ -35,10 +37,8 @@ export class JwtAccessAuthGuard implements CanActivate {
             if (user == null) {
                 throw new ExceptionHandler(AUTH_ERRORS.FAILED_AUTHENTICATE)
             }
-
-            request.user = user
-
-            return user
+            gqlContext['user'] = user
+            return true
         } catch (err) {
             console.error('[JwtAccessAuthGuard] Error: ', err)
             if (err.name === 'TokenExpiredError') {

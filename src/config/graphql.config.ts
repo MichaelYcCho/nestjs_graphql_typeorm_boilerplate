@@ -14,7 +14,14 @@ export function graphqlConfig(
         ...(configService.get<string>('NODE_ENV') !== 'prod' && {
             plugins: [ApolloServerPluginLandingPageLocalDefault()],
         }),
-        context: ({ req }) => ({ req }),
+        context: ({ req, connection }) => {
+            if (req) {
+                const token = req.headers.authorization
+                return { ...req, token }
+            } else {
+                return connection
+            }
+        },
         cache: 'bounded',
         formatError: (error: GraphQLError) => {
             return {
