@@ -2,8 +2,9 @@ import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
 import { UserRepository } from '@users/repository/user.repository'
 import { createUserInput, createUserOutput } from '@users/dtos/create-user.dto'
-import { ExceptionHandler } from '@common/errors/error.handler'
-import { USERS_ERRORS } from '@common/errors/error.list'
+import { ExceptionHandler } from '@core/errors/error.handler'
+import { USERS_ERRORS } from '@core/errors/error.list'
+import { bcryptHashing } from '@core/utils/hashing'
 
 @Injectable()
 export class UserService {
@@ -14,14 +15,15 @@ export class UserService {
 
     async createUser({ email, password, profileName }: createUserInput): Promise<createUserOutput> {
         try {
-            const existUser = await this.userRepository.findUserByEmail(email)
+            const existUser = await this.userRepository.getUserByEmail(email)
 
             if (existUser) {
                 throw new ExceptionHandler(USERS_ERRORS.USER_NAME_ALREADY_EXIST)
             }
+            const hashedPassword = await bcryptHashing(password, 12)
             await this.userRepository.save({
                 email,
-                password,
+                password: hashedPassword,
                 profileName,
             })
             return { isSuccess: true, error: null }
