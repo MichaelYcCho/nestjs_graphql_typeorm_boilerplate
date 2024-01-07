@@ -4,6 +4,7 @@ import { UserRepository } from '@users/repository/user.repository'
 import { createUserInput, createUserOutput } from '@users/dtos/create-user.dto'
 import { ExceptionHandler } from '@core/errors/error.handler'
 import { USERS_ERRORS } from '@core/errors/error.list'
+import { bcryptHashing } from '@core/utils/hashing'
 
 @Injectable()
 export class UserService {
@@ -19,9 +20,11 @@ export class UserService {
             if (existUser) {
                 throw new ExceptionHandler(USERS_ERRORS.USER_NAME_ALREADY_EXIST)
             }
+            const hashedPassword = await bcryptHashing(password, 12)
+            console.log('여기까진 이상없?', hashedPassword)
             await this.userRepository.save({
                 email,
-                password,
+                password: hashedPassword,
                 profileName,
             })
             return { isSuccess: true, error: null }
