@@ -2,13 +2,14 @@ import { ApolloDriverConfig } from '@nestjs/apollo'
 import { ConfigService } from '@nestjs/config'
 import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default'
 import { GraphQLError } from 'graphql'
+import { join } from 'path'
 
 export function graphqlConfig(
     configService: ConfigService,
 ): Omit<ApolloDriverConfig, 'driver'> | (Promise<Omit<ApolloDriverConfig, 'driver'>> & { uploads: boolean }) {
     return {
         uploads: false,
-        autoSchemaFile: true,
+        autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
         sortSchema: true,
         playground: false,
         ...(configService.get<string>('NODE_ENV') !== 'prod' && {

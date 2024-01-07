@@ -1,0 +1,56 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+input AuthRequestUserDto {
+  email: String!
+  password: String!
+}
+
+type JwtToken {
+  id: Float!
+  refreshToken: String!
+  refreshTokenExpiredAt: Float!
+  user: User!
+}
+
+type Mutation {
+  createUser(input: createUserInput!): createUserOutput!
+  login(input: AuthRequestUserDto!): TokenInfoResponseDto!
+}
+
+type Query {
+  myProfile: User!
+}
+
+type TokenInfoResponseDto {
+  accessToken: String!
+  refreshToken: String!
+  user: UserResponseDto!
+}
+
+type User {
+  email: String!
+  id: Float!
+  isActive: Boolean!
+  jwtToken: JwtToken!
+  password: String!
+  profileName: String!
+}
+
+type UserResponseDto {
+  id: Float!
+  profileName: String!
+  userName: String!
+}
+
+input createUserInput {
+  email: String!
+  password: String!
+  profileName: String!
+}
+
+type createUserOutput {
+  error: String
+  isSuccess: Boolean!
+}
