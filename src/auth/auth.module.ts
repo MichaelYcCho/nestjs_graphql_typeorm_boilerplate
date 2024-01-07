@@ -7,6 +7,7 @@ import { AuthService } from './services/auth.service'
 import { AuthResolver } from './auth.resolver'
 import { JwtTokenRepository } from './auth.repository'
 import { UserRepository } from '@users/repository/user.repository'
+import { JwtStrategy } from './strategies/jwt.strategy'
 
 @Global()
 @Module({})
@@ -15,8 +16,8 @@ export class AuthModule {
         return {
             module: AuthModule,
             imports: [
-                UsersModule,
                 ConfigModule,
+                UsersModule,
                 PassportModule.register({ defaultStrategy: 'jwt' }),
                 JwtModule.registerAsync({
                     imports: [ConfigModule],
@@ -29,9 +30,9 @@ export class AuthModule {
                     inject: [ConfigService],
                 }),
             ],
-            providers: [AuthResolver, AuthService, JwtTokenRepository, UserRepository],
+            providers: [AuthResolver, AuthService, JwtTokenRepository, UserRepository, JwtStrategy],
             controllers: [],
-            exports: [JwtModule],
+            exports: [AuthService, JwtModule],
         }
     }
 }
