@@ -1,8 +1,9 @@
-import { Field, PickType } from '@nestjs/graphql'
+import { Field, ObjectType, PickType } from '@nestjs/graphql'
 import { User } from '@users/entities/user.entity'
 import { IsNumber, IsString } from 'class-validator'
 
-export class UserDto extends PickType(User, ['createdAt', 'updatedAt'] as const) {
+@ObjectType()
+export class UserResponseDto extends PickType(User, ['createdAt', 'updatedAt'] as const) {
     @IsNumber()
     @Field((type) => Number)
     id: number

@@ -1,7 +1,8 @@
-import { Field } from '@nestjs/graphql'
-import { UserDto } from '@users/dtos/user-info.dto'
+import { Field, InputType, ObjectType } from '@nestjs/graphql'
+import { UserResponseDto } from '@users/dtos/user-info.dto'
 import { IsNotEmpty, IsString, Matches } from 'class-validator'
 
+@InputType()
 export class AuthRequestUserDto {
     @IsNotEmpty()
     @IsString()
@@ -17,6 +18,7 @@ export class AuthRequestUserDto {
     password: string
 }
 
+@ObjectType()
 export class TokenInfoResponseDto {
     @IsString()
     @Field((type) => String)
@@ -26,18 +28,19 @@ export class TokenInfoResponseDto {
     @Field((type) => String)
     refreshToken: string
 
-    @Field((type) => UserDto)
-    user: UserDto
+    @Field((type) => UserResponseDto)
+    user: UserResponseDto
 }
 
-export class AccessTokenDto {
+export class AccessTokenResponseDto {
     @IsNotEmpty()
     @IsString()
     @Field((type) => String)
     accessToken: string
 }
 
-export class RefreshTokenDto {
+@InputType()
+export class RefreshTokenRequestDto {
     @IsNotEmpty()
     @IsString()
     @Field((type) => String)

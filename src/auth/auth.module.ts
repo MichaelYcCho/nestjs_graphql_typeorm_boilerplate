@@ -4,6 +4,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 import { JwtModule } from '@nestjs/jwt'
 import { UsersModule } from '@users/users.module'
 import { AuthService } from './services/auth.service'
+import { AuthResolver } from './auth.resolver'
+import { JwtTokenRepository } from './auth.repository'
+import { UserRepository } from '@users/repository/user.repository'
 
 @Global()
 @Module({})
@@ -26,7 +29,7 @@ export class AuthModule {
                     inject: [ConfigService],
                 }),
             ],
-            providers: [AuthService],
+            providers: [AuthResolver, AuthService, JwtTokenRepository, UserRepository],
             controllers: [],
             exports: [JwtModule],
         }

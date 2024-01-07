@@ -21,7 +21,6 @@ export class UserService {
                 throw new ExceptionHandler(USERS_ERRORS.USER_NAME_ALREADY_EXIST)
             }
             const hashedPassword = await bcryptHashing(password, 12)
-            console.log('여기까진 이상없?', hashedPassword)
             await this.userRepository.save({
                 email,
                 password: hashedPassword,

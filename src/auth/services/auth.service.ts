@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config'
 import { InjectRepository } from '@nestjs/typeorm'
 import { JwtTokenRepository } from '@auth/auth.repository'
 import { TokenPayload } from '@auth/auth_type'
-import { AccessTokenDto, RefreshTokenDto } from '@auth/dto/auth-jwt.dto'
+import { AccessTokenResponseDto, RefreshTokenRequestDto } from '@auth/dto/auth-jwt.dto'
 import { ExceptionHandler } from '@core/errors/error.handler'
 import { AUTH_ERRORS, USERS_ERRORS } from '@core/errors/error.list'
 import { bcryptHashing } from '@core/utils/hashing'
@@ -105,7 +105,7 @@ export class AuthService {
         }
     }
 
-    async reissueAccessToken(refreshTokenDto: RefreshTokenDto): Promise<AccessTokenDto> {
+    async reissueAccessToken(refreshTokenDto: RefreshTokenRequestDto): Promise<AccessTokenResponseDto> {
         /*
             Comments: 
                 Reissue access token from refresh token.
