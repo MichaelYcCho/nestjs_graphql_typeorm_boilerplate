@@ -18,7 +18,7 @@ import { DataSource } from 'typeorm'
             isGlobal: true,
             envFilePath: `./env/.env.${process.env.NODE_ENV}`,
             validationSchema: Joi.object({
-                NODE_ENV: Joi.string().valid('dev', 'prod').required(),
+                NODE_ENV: Joi.string().valid('dev', 'test', 'prod').required(),
                 DB_HOST: Joi.string().required(),
                 DB_PORT: Joi.string().required(),
                 DB_USERNAME: Joi.string().required(),

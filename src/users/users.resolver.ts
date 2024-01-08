@@ -12,7 +12,9 @@ export class UserResolver {
 
     @Mutation((returns) => createUserOutput)
     async createUser(@Args('input') userInput: createUserInput): Promise<createUserOutput> {
-        return this.userService.createUser(userInput)
+        const { isSuccess, error } = await this.userService.createUser(userInput)
+        console.log('흠', isSuccess, error)
+        return { isSuccess, error }
     }
 
     @Query((returns) => User)
