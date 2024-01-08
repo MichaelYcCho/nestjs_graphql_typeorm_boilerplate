@@ -2,6 +2,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { User } from './entities/user.entity'
 import { createUserInput, createUserOutput } from './dtos/create-user.dto'
 import { UserService } from './users.service'
+import { UseGuards } from '@nestjs/common'
+import { JwtAuthGuard } from '@auth/guards/jwt.access.guard'
+import { AuthUser } from '@auth/decorators/auth-user.decorator'
 
 @Resolver((of) => User)
 export class UserResolver {
@@ -12,8 +15,9 @@ export class UserResolver {
         return this.userService.createUser(userInput)
     }
 
-    @Query((returns) => Boolean)
-    isUserTest(): boolean {
-        return true
+    @Query((returns) => User)
+    @UseGuards(JwtAuthGuard)
+    myProfile(@AuthUser() authUser: User) {
+        return authUser
     }
 }
