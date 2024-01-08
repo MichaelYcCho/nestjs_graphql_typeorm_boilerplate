@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectRepository } from '@nestjs/typeorm'
-import { UserRepository } from '@users/repository/user.repository'
-import { createUserInput, createUserOutput } from '@users/dtos/create-user.dto'
+import { UserRepository } from './repository/user.repository'
+import { createUserInput, createUserOutput } from './dtos/create-user.dto'
 import { ExceptionHandler } from '@core/errors/error.handler'
 import { USERS_ERRORS } from '@core/errors/error.list'
 import { bcryptHashing } from '@core/utils/hashing'
@@ -26,7 +26,8 @@ export class UserService {
                 password: hashedPassword,
                 profileName,
             })
-            return { isSuccess: true, error: null }
+            const response = { isSuccess: true, error: null }
+            return response
         } catch (e) {
             throw new ExceptionHandler(USERS_ERRORS.FAILED_CREATE_USER)
         }
