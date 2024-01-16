@@ -11,6 +11,10 @@ export const USERS_ERRORS = {
         errorCode: 100003,
         message: '유저 생성에 실패했습니다.',
     },
+    FAILED_GET_USER_PROFILE: {
+        errorCode: 100004,
+        message: '유저 프로필 조회에 실패했습니다.',
+    },
 }
 
 export const AUTH_ERRORS = {
