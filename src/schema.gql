@@ -21,6 +21,7 @@ type Mutation {
 
 type Query {
   myProfile: User!
+  userProfile(userId: Float!): UserProfileOutput!
 }
 
 type TokenInfoResponseDto {
@@ -36,6 +37,12 @@ type User {
   jwtToken: JwtToken!
   password: String!
   profileName: String!
+}
+
+type UserProfileOutput {
+  error: String
+  isSuccess: Boolean!
+  user: User
 }
 
 type UserResponseDto {

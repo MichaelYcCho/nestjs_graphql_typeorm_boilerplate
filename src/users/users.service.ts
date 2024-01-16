@@ -32,4 +32,17 @@ export class UserService {
             throw new ExceptionHandler(USERS_ERRORS.FAILED_CREATE_USER)
         }
     }
+
+    async getUserProfile(userId: number) {
+        try {
+            const user = await this.userRepository.getUserById(userId)
+            if (!user) {
+                throw new ExceptionHandler(USERS_ERRORS.NOT_EXIST_USER)
+            }
+            const response = { isSuccess: true, error: null, user }
+            return response
+        } catch (e) {
+            throw new ExceptionHandler(USERS_ERRORS.FAILED_GET_USER_PROFILE)
+        }
+    }
 }
